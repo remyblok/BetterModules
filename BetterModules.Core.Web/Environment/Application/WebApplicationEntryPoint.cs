@@ -8,6 +8,7 @@ using BetterModules.Core.Web.Environment.Application;
 using Common.Logging;
 
 [assembly: WebApplicationPreStartAttribute(typeof(WebApplicationEntryPoint), "PreApplicationStart", Order = 100)]
+[assembly: WebApplicationPreStartAttribute(typeof(WebApplicationEntryPoint), "PreWebApplicationStart", Order = 200)]
 
 namespace BetterModules.Core.Web.Environment.Application
 {
@@ -16,14 +17,15 @@ namespace BetterModules.Core.Web.Environment.Application
     /// </summary>
     public class WebApplicationEntryPoint
     {
-        private static bool isStarted;
+        private static bool isApplicationStarted;
+        private static bool isWebApplicationStarted;
 
         /// <summary>
         /// Method to run logic before application start (as PreApplicationStartMethod). Do not run this method from your code.
         /// </summary>        
         public static void PreApplicationStart()
         {
-            if (isStarted)
+            if (isApplicationStarted)
             {
                 return;
             }
@@ -55,12 +57,12 @@ namespace BetterModules.Core.Web.Environment.Application
 
             PreStartWebApplication();
 
-            isStarted = true;
+            isApplicationStarted = true;
         }
 
         public static void PreStartWebApplication()
         {
-            if (isStarted)
+            if (isWebApplicationStarted)
             {
                 return;
             }
@@ -106,7 +108,7 @@ namespace BetterModules.Core.Web.Environment.Application
                 throw new CoreException(message, ex);
             }
 
-            isStarted = true;
+            isWebApplicationStarted = true;
         }
     }
 }
